@@ -1,5 +1,6 @@
 import type { Equipo, ResumenPokemon, Usuario } from "../dominio/tipos";
 import { MAX_EQUIPO } from "../dominio/equipo";
+import { aValores, validarFicha, type FichaEntrenador } from "../dominio/entrenador";
 
 // El disco del navegador. Todo lo que sale de aquí entra como `unknown` y pasa por una "aduana":
 // se comprueba su forma antes de usarlo, porque pudo escribirlo otra versión de la app o el
@@ -83,5 +84,32 @@ export function guardarEquipo (usuarioId : number, equipo : Equipo) {
         localStorage.setItem(claveEquipo(usuarioId), JSON.stringify(equipo));
     } catch {
         console.warn('No se pudo guardar el equipo');
+    }
+}
+
+// ---------- Ficha del entrenador ----------
+// Como el equipo, es de cada usuario. La aduana revisa la forma Y las mismas reglas de dominio
+// (validarFicha): una ficha editada a mano en el disco con una edad de 500 no entra.
+const claveFicha = (usuarioId : number) => `pokedex_ficha_${usuarioId}`;
+
+export function leerFicha (usuarioId : number) : FichaEntrenador | null {
+    try {
+        const crudo : unknown = JSON.parse(localStorage.getItem(claveFicha(usuarioId)) ?? 'null');
+        if(typeof crudo !== 'object' || crudo === null) return null;
+        const f = crudo as Partial<FichaEntrenador>;
+        if(typeof f.nombre !== 'string' || typeof f.email !== 'string' || typeof f.region !== 'string'
+            || typeof f.edad !== 'number' || typeof f.lema !== 'string') return null;
+        const ficha : FichaEntrenador = {nombre : f.nombre, email : f.email, region : f.region, edad : f.edad, lema : f.lema};
+        return Object.keys(validarFicha(aValores(ficha))).length === 0 ? ficha : null;
+    } catch {
+        return null;
+    }
+}
+
+export function guardarFicha (usuarioId : number, ficha : FichaEntrenador) {
+    try {
+        localStorage.setItem(claveFicha(usuarioId), JSON.stringify(ficha));
+    } catch {
+        console.warn('No se pudo guardar la ficha del entrenador');
     }
 }

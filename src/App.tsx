@@ -14,8 +14,9 @@ import SkeletonDetalle from "./ui/components/SkeletonDetalle";
 const Detalle = lazy(() => import("./ui/pages/Detalle"));
 const Login = lazy(() => import("./ui/pages/Login"));
 const Equipo = lazy(() => import("./ui/pages/Equipo"));
+const Perfil = lazy(() => import("./ui/pages/Perfil"));
 
-// Mapa de rutas:  /  ·  /pokemon/:id  ·  /equipo (protegida)  ·  /login  ·  *
+// Mapa de rutas:  /  ·  /pokemon/:id  ·  /equipo y /perfil (protegidas)  ·  /login  ·  *
 export default function App () {
     return (
         <Routes>
@@ -31,6 +32,7 @@ export default function App () {
                 {/* Todo lo que está dentro de esta ruta padre (sin path) exige sesión. */}
                 <Route element={<RutaProtegida/>}>
                     <Route path="/equipo" element={<Equipo/>}/>
+                    <Route path="/perfil" element={<Perfil/>}/>
                 </Route>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="*" element={<NoEncontrada/>}/>
