@@ -14,8 +14,10 @@ export interface Estadistica {
     valor : number;
 }
 
-// El detalle completo: se pide solo cuando se abre /pokemon/:id.
+// El detalle completo: se pide solo cuando se abre /pokemon/:id. `imagen` es el sprite pequeño
+// (el mismo del listado y del equipo) y `arte` la ilustración grande para la página de detalle.
 export interface Pokemon extends ResumenPokemon {
+    arte : string;
     tipos : string[];
     alturaM : number;
     pesoKg : number;
@@ -23,7 +25,10 @@ export interface Pokemon extends ResumenPokemon {
     estadisticas : Estadistica[];
 }
 
-export type EstadoCarga = 'cargando' | 'listo' | 'error';
+// La colección del usuario: su equipo de Pokémon. Guarda lo mínimo para dibujarlo sin pedir nada.
+export type Equipo = ResumenPokemon[];
+
+export type EstadoCarga ='cargando' | 'listo' | 'error';
 
 export interface Usuario {
     id : number;

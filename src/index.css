@@ -1,1 +1,13 @@
 @import 'tailwindcss';
+
+/* La interfaz es de tema claro. Se declara de forma explícita para que el fondo y el color del texto
+   no dependan del modo oscuro del navegador o del sistema (con fondo transparente, un navegador en
+   modo oscuro dejaba texto oscuro sobre fondo oscuro). */
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: #fff;
+  color: #0f172a;
+}

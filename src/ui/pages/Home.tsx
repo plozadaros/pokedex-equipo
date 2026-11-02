@@ -1,6 +1,8 @@
 import { useMemo, type ChangeEvent } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useEquipo } from "../../aplicacion/useEquipo";
 import { usePokedex } from "../../aplicacion/usePokedex";
+import { useSesion } from "../../aplicacion/useSesion";
 import { POR_PAGINA, filtrarPorTermino, paginar, totalPaginas } from "../../dominio/pokedex";
 import type { ResumenPokemon } from "../../dominio/tipos";
 import EstadoError from "../components/EstadoError";
@@ -25,7 +27,11 @@ function armarParametros (termino : string, pagina : number) : URLSearchParams {
 
 export default function Home () {
     const { estado, datos, reintentar } = usePokedex();
+    const { usuario } = useSesion();
+    const { equipo, lleno, alternar } = useEquipo();
     const [parametros, setParametros] = useSearchParams();
+    // Los ids del equipo, para preguntar "¿está en el equipo?" por tarjeta sin recorrer el arreglo.
+    const idsEquipo = useMemo(() => new Set(equipo.map((miembro) => miembro.id)), [equipo]);
     const termino = parametros.get('q') ?? '';
 
     const filtrados = useMemo(() => filtrarPorTermino(datos ?? SIN_DATOS, termino), [datos, termino]);
@@ -83,9 +89,16 @@ export default function Home () {
                         </p>
                     ) : (
                         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-                            {visibles.map((pokemon) => (
-                                <li key={pokemon.id}><TarjetaPokemon pokemon={pokemon}/></li>
-                            ))}
+                            {visibles.map((pokemon) => {
+                                const enEquipo = idsEquipo.has(pokemon.id);
+                                return (
+                                    <li key={pokemon.id}>
+                                        <TarjetaPokemon pokemon={pokemon} enEquipo={enEquipo}
+                                            bloqueado={lleno && !enEquipo} sesionIniciada={usuario !== null}
+                                            onAlternar={alternar}/>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     )}
                     {paginas > 1 && (

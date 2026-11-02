@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./ui/layout/Layout";
 import Home from "./ui/pages/Home";
 import NoEncontrada from "./ui/pages/NoEncontrada";
+import RutaProtegida from "./ui/components/RutaProtegida";
 import SkeletonDetalle from "./ui/components/SkeletonDetalle";
 
 // App es SOLO el mapa de rutas: qué dirección muestra qué página. Nada de fetch ni de estado aquí;
@@ -12,8 +13,9 @@ import SkeletonDetalle from "./ui/components/SkeletonDetalle";
 // Home NO se parte: es la que todos ven y partirla sería descargar de más.
 const Detalle = lazy(() => import("./ui/pages/Detalle"));
 const Login = lazy(() => import("./ui/pages/Login"));
+const Equipo = lazy(() => import("./ui/pages/Equipo"));
 
-// Mapa de rutas:  /  ·  /pokemon/:id  ·  /login  ·  *
+// Mapa de rutas:  /  ·  /pokemon/:id  ·  /equipo (protegida)  ·  /login  ·  *
 export default function App () {
     return (
         <Routes>
@@ -26,6 +28,10 @@ export default function App () {
                         <Detalle/>
                     </Suspense>
                 }/>
+                {/* Todo lo que está dentro de esta ruta padre (sin path) exige sesión. */}
+                <Route element={<RutaProtegida/>}>
+                    <Route path="/equipo" element={<Equipo/>}/>
+                </Route>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="*" element={<NoEncontrada/>}/>
             </Route>

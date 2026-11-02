@@ -1,4 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
+import { MAX_EQUIPO } from "../../dominio/equipo";
+import { useEquipo } from "../../aplicacion/useEquipo";
 import { useSesion } from "../../aplicacion/useSesion";
 import { NOMBRE_APP } from "../marca";
 
@@ -7,6 +9,7 @@ const claseEnlace = ({isActive} : {isActive : boolean}) =>
 
 export default function Header () {
     const { usuario, salir } = useSesion();
+    const { cantidad } = useEquipo();
     return (
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
             <div>
@@ -18,7 +21,7 @@ export default function Header () {
                 <nav className="mt-2 flex gap-4 text-sm" aria-label="Principal">
                     <NavLink to="/" end className={claseEnlace}>Pokédex</NavLink>
                     {/* Las secciones del usuario solo se ofrecen con sesión: las rutas además están protegidas en App */}
-                    {usuario && <NavLink to="/equipo" className={claseEnlace}>Mi equipo</NavLink>}
+                    {usuario && <NavLink to="/equipo" className={claseEnlace}>Mi equipo ({cantidad}/{MAX_EQUIPO})</NavLink>}
                     {usuario && <NavLink to="/perfil" className={claseEnlace}>Mi perfil</NavLink>}
                 </nav>
             </div>

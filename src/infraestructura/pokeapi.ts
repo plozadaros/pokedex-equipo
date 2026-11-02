@@ -52,7 +52,8 @@ function mapearPokemon (crudo : PokemonAPI) : Pokemon {
     return {
         id : crudo.id,
         nombre : crudo.name,
-        imagen : crudo.sprites.other?.['official-artwork']?.front_default ?? imagenPequena(crudo.id),
+        imagen : imagenPequena(crudo.id),
+        arte : crudo.sprites.other?.['official-artwork']?.front_default ?? imagenPequena(crudo.id),
         tipos : crudo.types.map((t) => TIPOS[t.type.name] ?? t.type.name),
         alturaM : crudo.height / 10,
         pesoKg : crudo.weight / 10,
