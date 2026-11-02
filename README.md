@@ -1,6 +1,6 @@
 # Pokédex Equipo
 
-**URL pública (Vercel):** _pendiente: pegar aquí la dirección `.vercel.app` cuando se despliegue_
+**URL pública (Vercel):** https://pokedex-equipo.vercel.app/
 
 Un Pokédex para armar tu equipo de seis. Proyecto final del bloque React del Bootcamp Frontend & React
 (Tecsup): React 19 + TypeScript + Vite + Tailwind 4, con `react-router-dom`, Context, hooks propios, sesión
