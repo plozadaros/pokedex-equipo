@@ -91,7 +91,13 @@ dependen de la interfaz, no de PokeAPI.
 
 ## Decisión de diseño
 
-> _Borrador para la sustentación: léelo, cámbialo con tus palabras y asegúrate de poder defender cada razón._
+Mi decisión de diseño más importante fue cómo manejo la colección del usuario, que en mi proyecto es el equipo de seis Pokémon. Lo guardé en un Context con useReducer y dejé la regla de negocio, que dice máximo seis y sin repetidos, en una función pura del dominio, fuera de React.
+
+Usé Context porque el equipo lo necesitan al mismo tiempo el Header, las tarjetas, el detalle y la página de equipo, y pasarlo por props sería prop drilling. Usé useReducer porque cada acción parte siempre del estado más reciente, así dos clics seguidos no se pisan.
+
+La regla está en el dominio porque es una regla del negocio, no de la pantalla. Así la pruebo sin navegador, y el botón deshabilitado y el reductor usan exactamente la misma regla, entonces no pueden contradecirse.
+
+Además, cada usuario tiene su propio equipo: el Provider se vuelve a montar con una key cuando cambia la cuenta. Y todo lo que viene de afuera, la API de Pokémon y el disco, pasa por un adaptador o por una aduana que valida su forma antes de usarlo.
 
 **La colección vive en Context con `useReducer`, y la regla del máximo vive en el dominio.**
 
