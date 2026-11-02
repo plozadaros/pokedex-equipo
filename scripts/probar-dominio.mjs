@@ -55,4 +55,11 @@ assert.ok(validarFicha({ ...valida, edad: '9' }).edad, 'edad menor a 10');
 assert.ok(validarFicha({ ...valida, edad: '10.5' }).edad, 'edad no entera');
 assert.ok(validarFicha({ ...valida, lema: 'x'.repeat(81) }).lema, 'lema demasiado largo');
 
-console.log('dominio: todas las comprobaciones pasaron');
+// ---------- Puerto RepositorioPokemon: la segunda implementación cumple el mismo contrato ----------
+const { repositorioEnMemoria } = await import(new URL('../src/infraestructura/repositorioEnMemoria.ts', import.meta.url).href);
+const indiceEnMemoria = await repositorioEnMemoria.obtenerIndice();
+assert.deepEqual(Object.keys(indiceEnMemoria[0]).sort(), ['id', 'imagen', 'nombre'], 'el índice trae solo el resumen');
+assert.equal((await repositorioEnMemoria.obtenerPokemon(4)).nombre, 'charmander');
+assert.equal(await repositorioEnMemoria.obtenerPokemon(9999), null, 'un Pokémon inexistente es null, no un error');
+
+console.log('dominio y puerto: todas las comprobaciones pasaron');

@@ -1,4 +1,5 @@
 import type { Pokemon, ResumenPokemon } from "../dominio/tipos";
+import type { RepositorioPokemon } from "../dominio/repositorio";
 import { TOTAL_ESPECIES } from "../dominio/pokedex";
 import { POKEAPI_URL } from "./config";
 
@@ -71,7 +72,7 @@ function mapearPokemon (crudo : PokemonAPI) : Pokemon {
 // imágenes del listado se deducen del id: no hay una petición por Pokémon.
 let indiceEnMemoria : ResumenPokemon[] | null = null;
 
-export async function obtenerIndice (signal? : AbortSignal) : Promise<ResumenPokemon[]> {
+async function obtenerIndice (signal? : AbortSignal) : Promise<ResumenPokemon[]> {
     if(indiceEnMemoria) return indiceEnMemoria;
     const r = await fetch(`${POKEAPI_URL}/pokemon?limit=${TOTAL_ESPECIES}`, {signal});
     if(!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -82,10 +83,14 @@ export async function obtenerIndice (signal? : AbortSignal) : Promise<ResumenPok
 
 // Devuelve null cuando el Pokémon no existe (404): no es un fallo, es una respuesta válida que la
 // página traduce a "no encontrado". Cualquier otro código sí es un error.
-export async function obtenerPokemon (id : number, signal? : AbortSignal) : Promise<Pokemon | null> {
+async function obtenerPokemon (id : number, signal? : AbortSignal) : Promise<Pokemon | null> {
     if(!Number.isInteger(id) || id < 1) return null;
     const r = await fetch(`${POKEAPI_URL}/pokemon/${id}`, {signal});
     if(r.status === 404) return null;
     if(!r.ok) throw new Error(`HTTP ${r.status}`);
     return mapearPokemon((await r.json()) as PokemonAPI);
 }
+
+// El adaptador cumple el puerto del dominio (dominio/repositorio.ts). Solo se exporta ESTE objeto:
+// desde fuera nadie puede saltarse la interfaz y llamar a una función suelta de PokeAPI.
+export const repositorioPokeApi : RepositorioPokemon = {obtenerIndice, obtenerPokemon};
