@@ -11,9 +11,15 @@ export function estaEnEquipo (equipo : Equipo, id : number) : boolean {
     return equipo.some((miembro) => miembro.id === id);
 }
 
+export function estaLleno (equipo : Equipo) : boolean {
+    return equipo.length >= MAX_EQUIPO;
+}
+
+// La ÚNICA definición de "se puede o no agregar": la usan el reductor (agregarMiembro) y la
+// interfaz (el botón deshabilitado), así que no pueden contradecirse.
 export function motivoRechazo (equipo : Equipo, id : number) : MotivoRechazo | null {
     if(estaEnEquipo(equipo, id)) return 'repetido';
-    if(equipo.length >= MAX_EQUIPO) return 'lleno';
+    if(estaLleno(equipo)) return 'lleno';
     return null;
 }
 

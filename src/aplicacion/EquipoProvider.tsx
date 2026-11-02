@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useReducer, type ReactNode } from "react";
-import { MAX_EQUIPO, estaEnEquipo as buscarEnEquipo, reducirEquipo } from "../dominio/equipo";
+import { estaEnEquipo as buscarEnEquipo, estaLleno, reducirEquipo } from "../dominio/equipo";
 import type { Equipo } from "../dominio/tipos";
 import { guardarEquipo, leerEquipo } from "../infraestructura/almacen";
 import { EquipoContext, type ValorEquipo } from "./contexto-equipo";
@@ -32,7 +32,7 @@ function EquipoDeUsuario ({usuarioId, children} : PropsEquipo) {
     const valor = useMemo<ValorEquipo>(() => ({
         equipo,
         cantidad : equipo.length,
-        lleno : equipo.length >= MAX_EQUIPO,
+        lleno : estaLleno(equipo),
         estaEnEquipo : (id) => buscarEnEquipo(equipo, id),
         alternar,
         quitar

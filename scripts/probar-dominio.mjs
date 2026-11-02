@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 
 const dominio = (archivo) => import(new URL(`../src/dominio/${archivo}`, import.meta.url).href);
-const { agregarMiembro, quitarMiembro, motivoRechazo, reducirEquipo, MAX_EQUIPO } = await dominio('equipo.ts');
+const { agregarMiembro, quitarMiembro, motivoRechazo, reducirEquipo, estaLleno, MAX_EQUIPO } = await dominio('equipo.ts');
 const { filtrarPorTermino, paginar, totalPaginas } = await dominio('pokedex.ts');
 const { validarFicha } = await dominio('entrenador.ts');
 
@@ -16,6 +16,8 @@ for (let id = 1; id <= MAX_EQUIPO; id++) equipo = agregarMiembro(equipo, pokemon
 assert.equal(equipo.length, MAX_EQUIPO);
 assert.deepEqual(Object.keys(equipo[0]).sort(), ['id', 'imagen', 'nombre'], 'solo copia lo necesario');
 assert.equal(agregarMiembro(equipo, pokemon(7)), equipo, 'con el equipo lleno devuelve el MISMO arreglo');
+assert.equal(estaLleno(equipo), true);
+assert.equal(estaLleno(equipo.slice(1)), false);
 assert.equal(motivoRechazo(equipo, 7), 'lleno');
 assert.equal(motivoRechazo(equipo, 3), 'repetido');
 
