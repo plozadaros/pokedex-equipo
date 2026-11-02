@@ -45,10 +45,6 @@ export default function Login () {
     return (
         <form onSubmit={enviar(iniciar)} noValidate className="mx-auto flex max-w-sm flex-col gap-4 py-6">
             <h1 className="text-2xl font-bold">Inicia sesión</h1>
-            <p className="text-sm text-slate-600">
-                Para armar tu equipo necesitas una cuenta. La sesión la maneja DummyJSON; el usuario de
-                prueba está en el README del proyecto.
-            </p>
             <CampoForm etiqueta="Usuario" autoComplete="username" {...campo('usuario')}/>
             <CampoForm etiqueta="Contraseña" tipo="password" autoComplete="current-password" {...campo('clave')}/>
             <label className="flex items-center gap-2 text-sm">

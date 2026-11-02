@@ -63,7 +63,7 @@ export default function Home () {
             <div className="my-5">
                 <label htmlFor="buscar" className="sr-only">Buscar Pokémon por nombre o número</label>
                 <input id="buscar" type="search" value={termino} onChange={cambiarTermino}
-                    placeholder="Busca por nombre o número... (pikachu, 25)"
+                    placeholder="Buscar por nombre o número"
                     className="w-full max-w-md rounded-lg border border-slate-300 px-3 py-2"/>
             </div>
 
